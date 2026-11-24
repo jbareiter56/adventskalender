@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adventskalender – Türchen 1</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(160deg, #1b2838 0%, #0f1722 100%);
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    /* Sanftes Schweben für das geschlossene Türchen */
+    @keyframes schweben {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-7px) rotate(1.5deg);
+      }
+    }
+
+    /* Einblenden der Überraschung beim Öffnen */
+    @keyframes aufpoppen {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .tuer-karte {
+      width: 100%;
+      max-width: 340px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      backdrop-filter: blur(8px);
+      animation: schweben 3s ease-in-out infinite;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .tuer-karte:hover {
+      border-color: #f6c453;
+      background: rgba(255, 255, 255, 0.13);
+    }
+
+    /* Wenn geöffnet, stoppt das Schweben */
+    .tuer-karte.offen {
+      animation: none;
+      cursor: default;
+      border-color: rgba(246, 196, 83, 0.6);
+    }
+
+    .nummer {
+      display: inline-block;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f6c453;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .symbol {
+      font-size: 3.5rem;
+      margin: 8px 0 14px;
+    }
+
+    .hinweis {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #d6dee8;
+    }
+
+    .inhalt {
+      display: none;
+      animation: aufpoppen 0.4s ease forwards;
+    }
+
+    .tuer-karte.offen .geschlossen {
+      display: none;
+    }
+
+    .tuer-karte.offen .inhalt {
+      display: block;
+    }
+
+    .inhalt h2 {
+      margin: 8px 0 10px;
+      font-size: 1.35rem;
+      color: #fff3d1;
+    }
+
+    .inhalt p {
+      margin: 0;
+      line-height: 1.5;
+      color: #e6ecf2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tuer-karte" id="tuer1" onclick="oeffneTuer()">
+    <span class="nummer">1. Dezember</span>
+
+    <!-- Zustand 1: Geschlossen -->
+    <div class="geschlossen">
+      <div class="symbol">🎁</div>
+      <p class="hinweis">Tippe zum Öffnen</p>
+    </div>
+
+    <!-- Zustand 2: Geöffnet -->
+    <div class="inhalt">
+      <div class="symbol">✨📿✨</div>
+      <h2>Tag 1: Der Startschuss</h2>
+      <p>Heute beginnt unsere Kette – schnapp dir dein erstes Päckchen und leg los! ❤️</p>
+    </div>
+  </div>
+
+  <script>
+    function oeffneTuer() {
+      const karte = document.getElementById("tuer1");
+      karte.classList.add("offen");
+    }
+  </script>
+
+</body>
+</html>
