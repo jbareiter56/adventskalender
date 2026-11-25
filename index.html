@@ -346,4 +346,181 @@
     // ============================================================
     // 1. EINSTELLUNGEN (Hier kannst du deine Daten anpassen)
     // ============================================================
-    const WHATSAPP_NUMMER = "4915774938134"; //
+    const WHATSAPP_NUMMER = "491701234567"; // Deine Nummer mit 49 statt 0, ohne + oder Leerzeichen
+
+    // Inhalte für alle 24 Türchen (Audio-Dateien liegen im Ordner "audio/")
+    const TUERCHEN_DATEN = [
+      { tag: 1,  emoji: "✨", titel: "Kapitel 1: Der Anfang", text: "Mach es dir gemütlich, setz Kopfhörer auf und starte in den Dezember.", audio: "audio/tag1.mp3" },
+      { tag: 2,  emoji: "❄️", titel: "Kapitel 2: Schneeflocken", text: "Heute geht die Geschichte weiter – viel Spaß beim Zuhören!", audio: "audio/tag2.mp3" },
+      { tag: 3,  emoji: "🕯️", titel: "Kapitel 3: Kerzenschein", text: "Zeit für eine kleine Pause nur für dich.", audio: "audio/tag3.mp3" },
+      { tag: 4,  emoji: "☕", titel: "Kapitel 4: Winterwärme", text: "Schnapp dir einen Tee oder Kaffee und hör rein.", audio: "audio/tag4.mp3" },
+      { tag: 5,  emoji: "🌟", titel: "Kapitel 5: Sternenhimmel", text: "Morgen ist schon Nikolaus – aber erst mal Kapitel 5!", audio: "audio/tag5.mp3" },
+      { tag: 6,  emoji: "🎅", titel: "Kapitel 6: Nikolaus-Spezial", text: "Happy Nikolaus! Heute wartet ein besonderes Kapitel auf dich.", audio: "audio/tag6.mp3" },
+      { tag: 7,  emoji: "🧣", titel: "Kapitel 7: Eingekuschelt", text: "Perfekt für einen gemütlichen Abend.", audio: "audio/tag7.mp3" },
+      { tag: 8,  emoji: "🎶", titel: "Kapitel 8: Winterklänge", text: "Weiter geht's mit dem nächsten Teil.", audio: "audio/tag8.mp3" },
+      { tag: 9,  emoji: "🍪", titel: "Kapitel 9: Plätzchenduft", text: "Ein kleines Stück Adventszeit für deine Ohren.", audio: "audio/tag9.mp3" },
+      { tag: 10, emoji: "🌲", titel: "Kapitel 10: Winterwald", text: "Schon 10 Tage geschafft – hör direkt rein.", audio: "audio/tag10.mp3" },
+      { tag: 11, emoji: "💫", titel: "Kapitel 11: Funkeln", text: "Was wohl heute passiert?", audio: "audio/tag11.mp3" },
+      { tag: 12, emoji: "🎁", titel: "Kapitel 12: Halbzeit!", text: "Die Hälfte des Kalenders ist erreicht!", audio: "audio/tag12.mp3" },
+      { tag: 13, emoji: "🦌", titel: "Kapitel 13: Spuren im Schnee", text: "Viel Freude mit dem heutigen Kapitel.", audio: "audio/tag13.mp3" },
+      { tag: 14, emoji: "🔥", titel: "Kapitel 14: Kaminfeuer", text: "Lehn dich zurück und entspann dich.", audio: "audio/tag14.mp3" },
+      { tag: 15, emoji: "🌙", titel: "Kapitel 15: Winternacht", text: "Ein ruhiger Moment mitten im Dezember.", audio: "audio/tag15.mp3" },
+      { tag: 16, emoji: "🛷", titel: "Kapitel 16: Schlittenfahrt", text: "Weiter geht unsere Reise.", audio: "audio/tag16.mp3" },
+      { tag: 17, emoji: "🔔", titel: "Kapitel 17: Glockenklang", text: "Nur noch eine Woche bis Heiligabend!", audio: "audio/tag17.mp3" },
+      { tag: 18, emoji: "🍫", titel: "Kapitel 18: Heiße Schokolade", text: "Gönn dir was Süßes beim Zuhören.", audio: "audio/tag18.mp3" },
+      { tag: 19, emoji: "🌠", titel: "Kapitel 19: Sternschnuppe", text: "Wünsch dir was – und hör rein.", audio: "audio/tag19.mp3" },
+      { tag: 20, emoji: "⛄", titel: "Kapitel 20: Winterzauber", text: "Die letzten Tage laufen!", audio: "audio/tag20.mp3" },
+      { tag: 21, emoji: "🕯️", titel: "Kapitel 21: Wintersonnenwende", text: "Ab heute werden die Tage wieder länger.", audio: "audio/tag21.mp3" },
+      { tag: 22, emoji: "🎀", titel: "Kapitel 22: Vorfreude", text: "Gleich ist es soweit – Kapitel 22 für dich.", audio: "audio/tag22.mp3" },
+      { tag: 23, emoji: "✨", titel: "Kapitel 23: Der Abend davor", text: "Morgen ist Heiligabend – hier kommt der vorletzte Teil.", audio: "audio/tag23.mp3" },
+      { tag: 24, emoji: "🎄", titel: "Kapitel 24: Frohe Weihnachten! ❤️", text: "Das große Finale – danke für jeden einzelnen Tag mit dir.", audio: "audio/tag24.mp3" }
+    ];
+
+    // ============================================================
+    // 2. LOGIK (Datum, Audio, Reaktionen)
+    // ============================================================
+    let testModus = false;
+    let bgWarAktivVorKapitel = false;
+
+    const grid = document.getElementById("kalenderGrid");
+    const bgMusik = document.getElementById("bgMusik");
+    const bgMusikBtn = document.getElementById("bgMusikBtn");
+    const kapitelAudio = document.getElementById("kapitelAudio");
+    const kapitelAudioSrc = document.getElementById("kapitelAudioSrc");
+
+    bgMusik.volume = 0.22; // Dezente Hintergrund-Lautstärke
+
+    // Hintergrundmusik automatisch pausieren, wenn ein Hörbuch-Kapitel läuft
+    kapitelAudio.addEventListener("play", () => {
+      if (!bgMusik.paused) {
+        bgWarAktivVorKapitel = true;
+        bgMusik.pause();
+        bgMusikBtn.textContent = "🎵 Hintergrundmusik: Pausiert";
+      }
+    });
+
+    kapitelAudio.addEventListener("pause", () => {
+      if (bgWarAktivVorKapitel) {
+        bgMusik.play().catch(() => {});
+        bgMusikBtn.textContent = "🎵 Hintergrundmusik: An";
+        bgWarAktivVorKapitel = false;
+      }
+    });
+
+    function toggleBgMusik() {
+      bgWarAktivVorKapitel = false;
+      if (bgMusik.paused) {
+        bgMusik.play();
+        bgMusikBtn.textContent = "🎵 Hintergrundmusik: An";
+        bgMusikBtn.classList.add("aktiv");
+      } else {
+        bgMusik.pause();
+        bgMusikBtn.textContent = "🎵 Hintergrundmusik: Aus";
+        bgMusikBtn.classList.remove("aktiv");
+      }
+    }
+
+    function toggleTestModus() {
+      testModus = !testModus;
+      const btn = document.getElementById("testModusBtn");
+      btn.textContent = testModus ? "🛠️ Vorschau: An (Alle offen)" : "🛠️ Vorschau: Aus";
+      btn.classList.toggle("aktiv", testModus);
+      baueKalender();
+    }
+
+    function istTuerFreigeschaltet(tag) {
+      if (testModus) return true;
+      const heute = new Date();
+      const monat = heute.getMonth(); // 11 = Dezember (0-basiert)
+      const datumTag = heute.getDate();
+      return monat === 11 && datumTag >= tag;
+    }
+
+    function baueKalender() {
+      grid.innerHTML = "";
+      TUERCHEN_DATEN.forEach((eintrag) => {
+        const frei = istTuerFreigeschaltet(eintrag.tag);
+        const schonOffen = localStorage.getItem(`tuer_geoeffnet_${eintrag.tag}`) === "true";
+
+        const karte = document.createElement("div");
+        karte.className = "tuer " + (frei ? (schonOffen ? "geoeffnet" : "bereit") : "gesperrt");
+
+        karte.innerHTML = `
+          <div class="tuer-zahl">${eintrag.tag}</div>
+          <div class="tuer-icon">${frei ? (schonOffen ? eintrag.emoji : "🎁") : "🔒"}</div>
+          <div class="tuer-status">${frei ? (schonOffen ? "Geöffnet" : "Bereit") : `${eintrag.tag}. Dez`}</div>
+        `;
+
+        karte.onclick = () => {
+          if (!frei) {
+            karte.classList.remove("shake");
+            void karte.offsetWidth;
+            karte.classList.add("shake");
+            zeigeToast(`Türchen ${eintrag.tag} öffnet sich erst am ${eintrag.tag}. Dezember! 🎄`);
+            return;
+          }
+          localStorage.setItem(`tuer_geoeffnet_${eintrag.tag}`, "true");
+          baueKalender();
+          oeffneModal(eintrag);
+        };
+
+        grid.appendChild(karte);
+      });
+    }
+
+    function oeffneModal(eintrag) {
+      document.getElementById("modalTag").textContent = `${eintrag.tag}. Dezember`;
+      document.getElementById("modalEmoji").textContent = eintrag.emoji;
+      document.getElementById("modalTitel").textContent = eintrag.titel;
+      document.getElementById("modalText").textContent = eintrag.text;
+
+      // Audio setzen
+      kapitelAudio.pause();
+      kapitelAudioSrc.src = eintrag.audio;
+      kapitelAudio.load();
+
+      // Reaktionen aufbauen
+      const reaktionenBox = document.getElementById("reaktionenBox");
+      reaktionenBox.innerHTML = "";
+      ["❤️", "🥰", "😂", "🥹"].forEach((emoji) => {
+        const key = `reaktion_${eintrag.tag}_${emoji}`;
+        const count = Number(localStorage.getItem(key) || 0);
+        const btn = document.createElement("button");
+        btn.className = "reaktion-btn" + (count > 0 ? " geklickt" : "");
+        btn.innerHTML = `${emoji} <span>${count}</span>`;
+        btn.onclick = () => {
+          const neu = Number(localStorage.getItem(key) || 0) + 1;
+          localStorage.setItem(key, neu);
+          btn.querySelector("span").textContent = neu;
+          btn.classList.add("geklickt");
+        };
+        reaktionenBox.appendChild(btn);
+      });
+
+      // WhatsApp-Link anpassen
+      const nachricht = encodeURIComponent(`Hey! Ich habe gerade Türchen ${eintrag.tag} („${eintrag.titel}“) angehört ❤️`);
+      document.getElementById("whatsappLink").href = `https://wa.me/${WHATSAPP_NUMMER}?text=${nachricht}`;
+
+      document.getElementById("modalBackdrop").classList.add("sichtbar");
+    }
+
+    function schliesseModal() {
+      kapitelAudio.pause();
+      document.getElementById("modalBackdrop").classList.remove("sichtbar");
+    }
+
+    function zeigeToast(text) {
+      const toast = document.getElementById("toast");
+      toast.textContent = text;
+      toast.style.display = "block";
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+      }, 2800);
+    }
+
+    // Start
+    baueKalender();
+  </script>
+</body>
+</html>
