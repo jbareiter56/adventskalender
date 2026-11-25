@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adventskalender – Türchen 1</title>
+  <title>Dein Adventskalender 2026</title>
   <style>
+    :root {
+      --bg-top: #141e30;
+      --bg-bottom: #0b111e;
+      --card-bg: rgba(255, 255, 255, 0.07);
+      --card-border: rgba(255, 255, 255, 0.16);
+      --gold: #f6c453;
+      --gold-soft: rgba(246, 196, 83, 0.2);
+      --text-main: #f4f6f9;
+      --text-muted: #b8c4d4;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -12,135 +23,327 @@
     body {
       margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(160deg, #1b2838 0%, #0f1722 100%);
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #ffffff;
-      padding: 20px;
+      background: linear-gradient(170deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px 16px 60px;
     }
 
-    /* Sanftes Schweben für das geschlossene Türchen */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      color: #fff6df;
+    }
+
+    .subtitle {
+      margin: 0 auto 18px;
+      max-width: 520px;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .top-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: var(--text-main);
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .pill-btn:hover {
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .pill-btn.aktiv {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      color: #fff6df;
+    }
+
+    /* Animationen */
     @keyframes schweben {
-      0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-      }
-      50% {
-        transform: translateY(-7px) rotate(1.5deg);
-      }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
     }
 
-    /* Einblenden der Überraschung beim Öffnen */
+    @keyframes wackeln {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-4deg); }
+      75% { transform: rotate(4deg); }
+    }
+
     @keyframes aufpoppen {
-      from {
-        opacity: 0;
-        transform: scale(0.9) translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    .tuer-karte {
-      width: 100%;
-      max-width: 340px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 20px;
-      padding: 32px 24px;
+    /* Türchen-Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 14px;
+    }
+
+    .tuer {
+      aspect-ratio: 1 / 1;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
       text-align: center;
       cursor: pointer;
       user-select: none;
-      backdrop-filter: blur(8px);
-      animation: schweben 3s ease-in-out infinite;
+      position: relative;
       transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     }
 
-    .tuer-karte:hover {
-      border-color: #f6c453;
-      background: rgba(255, 255, 255, 0.13);
+    .tuer.bereit {
+      animation: schweben 3.2s ease-in-out infinite;
+      border-color: rgba(246, 196, 83, 0.55);
     }
 
-    /* Wenn geöffnet, stoppt das Schweben */
-    .tuer-karte.offen {
-      animation: none;
-      cursor: default;
-      border-color: rgba(246, 196, 83, 0.6);
+    .tuer.bereit:hover {
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.14);
+      transform: translateY(-3px);
     }
 
-    .nummer {
-      display: inline-block;
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
+    .tuer.geoeffnet {
+      background: rgba(246, 196, 83, 0.12);
+      border-color: rgba(246, 196, 83, 0.45);
+    }
+
+    .tuer.gesperrt {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .tuer.shake {
+      animation: wackeln 0.35s ease;
+    }
+
+    .tuer-zahl {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .tuer-icon {
+      font-size: 1.7rem;
+      margin-bottom: 4px;
+    }
+
+    .tuer-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Modal / Fenster für geöffnetes Türchen */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 9, 17, 0.78);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.sichtbar {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 440px;
+      background: #182336;
+      border: 1px solid rgba(246, 196, 83, 0.45);
+      border-radius: 22px;
+      padding: 26px 22px;
+      text-align: center;
+      position: relative;
+      animation: aufpoppen 0.25s ease;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .modal-tag {
+      font-size: 0.8rem;
       text-transform: uppercase;
-      color: #f6c453;
-      margin-bottom: 12px;
+      letter-spacing: 0.12em;
+      color: var(--gold);
       font-weight: 600;
     }
 
-    .symbol {
-      font-size: 3.5rem;
-      margin: 8px 0 14px;
+    .modal-emoji {
+      font-size: 3rem;
+      margin: 10px 0 6px;
     }
 
-    .hinweis {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #d6dee8;
-    }
-
-    .inhalt {
-      display: none;
-      animation: aufpoppen 0.4s ease forwards;
-    }
-
-    .tuer-karte.offen .geschlossen {
-      display: none;
-    }
-
-    .tuer-karte.offen .inhalt {
-      display: block;
-    }
-
-    .inhalt h2 {
-      margin: 8px 0 10px;
+    .modal h2 {
+      margin: 4px 0 10px;
       font-size: 1.35rem;
-      color: #fff3d1;
+      color: #fff7e2;
     }
 
-    .inhalt p {
-      margin: 0;
-      line-height: 1.5;
-      color: #e6ecf2;
+    .modal p {
+      margin: 0 0 16px;
+      line-height: 1.55;
+      color: #dce4ee;
+      font-size: 0.96rem;
+    }
+
+    audio {
+      width: 100%;
+      margin: 6px 0 14px;
+      border-radius: 999px;
+    }
+
+    .reaktionen {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .reaktion-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .reaktion-btn:active {
+      transform: scale(1.12);
+    }
+
+    .reaktion-btn.geklickt {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+    }
+
+    .wa-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: #25D366;
+      color: #0b141a;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .hinweis-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #23314a;
+      border: 1px solid var(--gold);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      display: none;
+      z-index: 200;
     }
   </style>
 </head>
 <body>
 
-  <div class="tuer-karte" id="tuer1" onclick="oeffneTuer()">
-    <span class="nummer">1. Dezember</span>
+  <div class="container">
+    <header>
+      <h1>✨ Dein Adventskalender ✨</h1>
+      <p class="subtitle">24 kleine Kapitel, Erinnerungen und Überraschungen – jeden Tag öffnet sich ein neues Türchen für dich.</p>
+      <div class="top-controls">
+        <button id="bgMusikBtn" class="pill-btn" onclick="toggleBgMusik()">🎵 Hintergrundmusik: Aus</button>
+        <button id="testModusBtn" class="pill-btn" onclick="toggleTestModus()">🛠️ Vorschau: Aus</button>
+      </div>
+    </header>
 
-    <!-- Zustand 1: Geschlossen -->
-    <div class="geschlossen">
-      <div class="symbol">🎁</div>
-      <p class="hinweis">Tippe zum Öffnen</p>
-    </div>
+    <main class="grid" id="kalenderGrid"></main>
+  </div>
 
-    <!-- Zustand 2: Geöffnet -->
-    <div class="inhalt">
-      <div class="symbol">✨📿✨</div>
-      <h2>Tag 1: Der Startschuss</h2>
-      <p>Heute beginnt unsere Kette – schnapp dir dein erstes Päckchen und leg los! ❤️</p>
+  <!-- Modal für den Türchen-Inhalt -->
+  <div class="modal-backdrop" id="modalBackdrop" onclick="schliesseModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="schliesseModal()">✕</button>
+      <div class="modal-tag" id="modalTag">1. Dezember</div>
+      <div class="modal-emoji" id="modalEmoji">🎁</div>
+      <h2 id="modalTitel">Kapitel 1</h2>
+      <p id="modalText">Hier steht dein Text.</p>
+
+      <!-- Hörbuch-Player -->
+      <audio id="kapitelAudio" controls preload="none">
+        <source id="kapitelAudioSrc" src="" type="audio/mpeg" />
+        Dein Browser unterstützt leider keinen Audio-Player.
+      </audio>
+
+      <!-- Emoji-Reaktionen -->
+      <div class="reaktionen" id="reaktionenBox"></div>
+
+      <!-- Direkte Nachricht an dich -->
+      <a id="whatsappLink" class="wa-btn" href="#" target="_blank" rel="noopener">💬 Reaktion schicken</a>
     </div>
   </div>
 
-  <script>
-    function oeffneTuer() {
-      const karte = document.getElementById("tuer1");
-      karte.classList.add("offen");
-    }
-  </script>
+  <!-- Kleiner Hinweis bei noch gesperrten Türchen -->
+  <div class="hinweis-toast" id="toast">Noch etwas Geduld – dieses Türchen öffnet sich erst an seinem Tag! 🎄</div>
 
-</body>
-</html>
+  <!-- Hintergrundmusik-Loop -->
+  <audio id="bgMusik" src="audio/hintergrund-loop.mp3" loop preload="none"></audio>
+
+  <script>
+    // ============================================================
+    // 1. EINSTELLUNGEN (Hier kannst du deine Daten anpassen)
+    // ============================================================
+    const WHATSAPP_NUMMER = "4915774938134"; //
