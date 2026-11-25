@@ -282,6 +282,23 @@
       text-decoration: none;
     }
 
+    .deezer-btn {
+      display: inline-block;
+      margin: 4px 0 14px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: #a238ff;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .deezer-btn:hover {
+      opacity: 0.88;
+    }
+
     .hinweis-toast {
       position: fixed;
       bottom: 20px;
@@ -328,6 +345,11 @@
         Dein Browser unterstützt leider keinen Audio-Player.
       </audio>
 
+      <!-- Optionaler Deezer-Link -->
+      <a id="deezerLink" class="deezer-btn" href="#" target="_blank" rel="noopener" style="display: none;">
+        🎧 Song auf Deezer anhören
+      </a>
+
       <!-- Emoji-Reaktionen -->
       <div class="reaktionen" id="reaktionenBox"></div>
 
@@ -350,8 +372,8 @@
 
     // Inhalte für alle 24 Türchen (Audio-Dateien liegen im Ordner "audio/")
     const TUERCHEN_DATEN = [
-      { tag: 1,  emoji: "✨", titel: "Kapitel 1: Der Anfang", text: "Mach es dir gemütlich, setz Kopfhörer auf und starte in den Dezember.", audio: "audio/tag1.mp3" },
-      { tag: 2,  emoji: "❄️", titel: "Kapitel 2: Schneeflocken", text: "Heute geht die Geschichte weiter – viel Spaß beim Zuhören!", audio: "audio/tag2.mp3" },
+      { tag: 1,  emoji: "✨", titel: "Kapitel 1: Der Anfang", text: "Mach es dir gemütlich, setz Kopfhörer auf und starte in den Dezember.", audio: "audio/tag1.mp3", deezer: "https://www.deezer.com/track/3135556" },
+      { tag: 2,  emoji: "❄️", titel: "Kapitel 2: Schneeflocken", text: "Heute geht die Geschichte weiter – viel Spaß beim Zuhören!", audio: "audio/tag2.mp3", deezer: "https://www.deezer.com/track/3135556" },
       { tag: 3,  emoji: "🕯️", titel: "Kapitel 3: Kerzenschein", text: "Zeit für eine kleine Pause nur für dich.", audio: "audio/tag3.mp3" },
       { tag: 4,  emoji: "☕", titel: "Kapitel 4: Winterwärme", text: "Schnapp dir einen Tee oder Kaffee und hör rein.", audio: "audio/tag4.mp3" },
       { tag: 5,  emoji: "🌟", titel: "Kapitel 5: Sternenhimmel", text: "Morgen ist schon Nikolaus – aber erst mal Kapitel 5!", audio: "audio/tag5.mp3" },
@@ -478,6 +500,15 @@
       kapitelAudio.pause();
       kapitelAudioSrc.src = eintrag.audio;
       kapitelAudio.load();
+
+      // Deezer-Button ein- oder ausblenden
+      const deezerBtn = document.getElementById("deezerLink");
+      if (eintrag.deezer) {
+        deezerBtn.href = eintrag.deezer;
+        deezerBtn.style.display = "inline-block";
+      } else {
+        deezerBtn.style.display = "none";
+      }
 
       // Reaktionen aufbauen
       const reaktionenBox = document.getElementById("reaktionenBox");
