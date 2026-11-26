@@ -461,6 +461,34 @@
       return monat === 11 && datumTag >= tag;
     }
 
+    function mischeTueren(eintraege) {
+      const kopie = [...eintraege];
+      for (let i = kopie.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [kopie[i], kopie[j]] = [kopie[j], kopie[i]];
+    }
+    return kopie;
+    }
+
+    function renderKalender(datenListe) {
+      const grid = document.getElementById("kalender-grid"); // ggf. an deine ID anpassen
+      grid.innerHTML = "";
+    
+      const gemischt = mischeTueren(datenListe);
+    
+      gemischt.forEach((eintrag) => {
+        const tuer = document.createElement("button");
+        tuer.className = "tuer";
+        tuer.textContent = eintrag.tag; // Zeigt z. B. 17, 4, 21 ...
+    
+        tuer.addEventListener("click", () => {
+          oeffneModal(eintrag); // Nutzt weiterhin exakt diesen Eintrag (Tag, Text, Audio, Deezer)
+        });
+    
+        grid.appendChild(tuer);
+      });
+    }
+
     function baueKalender() {
       grid.innerHTML = "";
       TUERCHEN_DATEN.forEach((eintrag) => {
