@@ -33,6 +33,15 @@
       padding: 24px 16px 60px;
     }
 
+    /* Eigenes Hintergrundbild für Handys / schmale Bildschirme */
+    @media (max-width: 768px) {
+      body {
+        background:
+          linear-gradient(rgba(18, 12, 8, 0.38), rgba(18, 12, 8, 0.48)),
+          url("hintergrund-mobil.jpg") center center / cover no-repeat fixed;
+      }
+    }
+
     .container {
       max-width: 960px;
       margin: 0 auto;
