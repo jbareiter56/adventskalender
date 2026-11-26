@@ -24,7 +24,6 @@
     * {
       box-sizing: border-box;
     }
-
     
     body {
       margin: 0;
@@ -179,14 +178,6 @@
 
     .tuer.shake {
       animation: wackeln 0.35s ease;
-    }
-
-    .tuer-zahl {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 6px;
     }
 
     .tuer-icon {
@@ -395,13 +386,13 @@
   <div class="hinweis-toast" id="toast">Noch etwas Geduld – dieses Türchen öffnet sich erst an seinem Tag! 🎄</div>
 
   <!-- Hintergrundmusik-Loop -->
-  <audio id="bgMusik" src="audio/hintergrund-loop.mp3" loop preload="none"></audio>
+  <audio id="bgMusik" src="audio/Adventskalender-loop.mp3" loop preload="none"></audio>
 
   <script>
     // ============================================================
     // 1. EINSTELLUNGEN (Hier kannst du deine Daten anpassen)
     // ============================================================
-    const WHATSAPP_NUMMER = "491701234567"; // Deine Nummer mit 49 statt 0, ohne + oder Leerzeichen
+    const WHATSAPP_NUMMER = "4915774938134"; // Deine Nummer mit 49 statt 0, ohne + oder Leerzeichen
 
     // Inhalte für alle 24 Türchen (Audio-Dateien liegen im Ordner "audio/")
     const TUERCHEN_DATEN = [
@@ -540,10 +531,15 @@
       document.getElementById("modalTitel").textContent = eintrag.titel;
       document.getElementById("modalText").textContent = eintrag.text;
 
-      // Audio setzen
+      // Audio setzen (nur anzeigen, wenn eine Datei eingetragen ist)
       kapitelAudio.pause();
-      kapitelAudioSrc.src = eintrag.audio;
-      kapitelAudio.load();
+      if (eintrag.audio) {
+        kapitelAudioSrc.src = eintrag.audio;
+        kapitelAudio.load();
+        kapitelAudio.style.display = "block";
+      } else {
+        kapitelAudio.style.display = "none";
+      }
 
       // Deezer-Button ein- oder ausblenden
       const deezerBtn = document.getElementById("deezerLink");
