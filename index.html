@@ -57,7 +57,30 @@
       body {
         background:
           linear-gradient(rgba(18, 12, 8, 0.38), rgba(18, 12, 8, 0.48)),
-          url("hintergrund-mobil.png") center center / cover no-repeat fixed;
+          url("hintergrund-mobil.png") center top / 100% auto no-repeat scroll;
+      }
+      grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+    
+      .tuer {
+        padding: 8px;
+        border-radius: 14px;
+      }
+    
+      .tuer-zahl {
+        font-size: 1.65rem;
+        margin-bottom: 3px;
+      }
+    
+      .tuer-icon {
+        font-size: 1.35rem;
+        margin-bottom: 2px;
+      }
+    
+      .tuer-status {
+        font-size: 0.7rem;
       }
     }
 
