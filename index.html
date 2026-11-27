@@ -52,38 +52,6 @@
       font-family: inherit;
     }
 
-    /* Eigenes Hintergrundbild für Handys / schmale Bildschirme */
-    @media (max-width: 768px) {
-      body {
-        background:
-          linear-gradient(rgba(18, 12, 8, 0.38), rgba(18, 12, 8, 0.48)),
-          url("hintergrund-mobil.png") center center / cover no-repeat scroll;
-      }
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-      }
-    
-      .tuer {
-        padding: 8px;
-        border-radius: 14px;
-      }
-    
-      .tuer-zahl {
-        font-size: 1.65rem;
-        margin-bottom: 3px;
-      }
-    
-      .tuer-icon {
-        font-size: 1.35rem;
-        margin-bottom: 2px;
-      }
-    
-      .tuer-status {
-        font-size: 0.7rem;
-      }
-    }
-
     .container {
       max-width: 960px;
       margin: 0 auto;
@@ -360,6 +328,39 @@
       display: none;
       z-index: 200;
     }
+
+        /* Eigenes Hintergrundbild für Handys / schmale Bildschirme */
+    @media (max-width: 768px) {
+      body {
+        background:
+          linear-gradient(rgba(18, 12, 8, 0.38), rgba(18, 12, 8, 0.48)),
+          url("hintergrund-mobil.png") center center / cover no-repeat scroll;
+      }
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+    
+      .tuer {
+        padding: 8px;
+        border-radius: 14px;
+      }
+    
+      .tuer-zahl {
+        font-size: 1.65rem;
+        margin-bottom: 3px;
+      }
+    
+      .tuer-icon {
+        font-size: 1.35rem;
+        margin-bottom: 2px;
+      }
+    
+      .tuer-status {
+        font-size: 0.7rem;
+      }
+    }
+    
   </style>
 </head>
 <body>
